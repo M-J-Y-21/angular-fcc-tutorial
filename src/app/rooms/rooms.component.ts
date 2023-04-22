@@ -1,12 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  DoCheck,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { Room, RoomList } from './rooms';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   selector: 'app-rooms',
   templateUrl: './rooms.component.html',
   styleUrls: ['./rooms.component.css'],
 })
-export class RoomsComponent implements OnInit {
+export class RoomsComponent implements OnInit, DoCheck, AfterViewInit {
   hotelName = 'Hilton Hotel Johannesburg';
 
   numberOfRooms = 10;
@@ -26,11 +33,27 @@ export class RoomsComponent implements OnInit {
   selectedRoom!: RoomList;
 
   // Constructor is not for logic only for dependency injection
+  // In summary, @ViewChild(HeaderComponent, {static: true}) is used when you need to access a child
+  // component in the ngOnInit() lifecycle hook of the parent component,
+  // and it ensures that the child component is available at that time.
+  @ViewChild(HeaderComponent) headerComponent!: HeaderComponent;
   constructor() {}
+  ngAfterViewInit(): void {
+    this.headerComponent.title = 'Rooms View';
+  }
+
+  // ngDoCheck is a lifecycle hook that gets called after every change detection cycle, very costly
+  // might be needed if you want to detect changes for something that is does not fall into any other lifecycle hook
+  // try to avoid ngDoCheck as much as possible
+  // Don't implement ngDoCheck and ngOnChanges on same component
+  ngDoCheck(): void {
+    console.log('On changes is called');
+  }
 
   // ngOnInit is a lifecycle hook that gets called after the constructor
   // Use ngOnInit after the component is initialized
   ngOnInit(): void {
+    console.log(this.headerComponent);
     this.roomList = [
       {
         roomId: 1,
