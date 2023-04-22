@@ -13,45 +13,20 @@
 <!-- covers above essentially but more concise -->
 {{ rooms?.availableRooms ?? "No rooms" }}
 
+<div *ngIf="selectedRoom">
+  {{ selectedRoom | json }}
+</div>
+
+<div>
+  <button (click)="addRoom()">Add Room</button>
+</div>
+
 <!-- json pipe use to see json format of object, only for debugging purposes -->
 <!-- {{ roomList | json }} -->
 
 <div *ngIf="rooms.availableRooms > 0">
-  Rooms List
-  <table>
-    <tr>
-      <th>Index</th>
-      <th>Even/Odd</th>
-      <th>Room number</th>
-      <th>Room Type</th>
-      <th>Room Price</th>
-      <th>Amenities</th>
-      <th>Checkin Time</th>
-      <th>Rating</th>
-    </tr>
-    <!-- slice pipe usage: "slice : x:y" start from x index and goto y (exclusive) -->
-    <!-- General use case for slice is pagination in testing static environment, not for deployment -->
-    <tr
-      [ngClass]="e ? 'even' : 'odd'"
-      *ngFor="
-        let room of roomList | slice : 0 : 3;
-        let e = even;
-        let o = odd;
-        let i = index
-      "
-    >
-      <td>{{ i | percent }}</td>
-      <td>{{ e ? "Even" : "Odd" }}</td>
-      <td>{{ room.roomId }}</td>
-      <td>{{ room.roomType }}</td>
-      <td>{{ room.price | currency : "ILS" }}</td>
-      <td>{{ room.amenities | titlecase }}</td>
-      <!-- Can use "|" pipe operator to transform data example below is changing date format with DatePipe, check docs for more -->
-      <td>{{ room.checkInTime | date }}</td>
-      <!-- number: 'x.y-z x number of digits before dec point, y min digits after dec point z is same for max'-->
-      <td>{{ room.rating | number : "1.0-2" }}</td>
-    </tr>
-  </table>
+  <app-rooms-list [rooms]="roomList" [title]="title"
+  (selectedRoom)="selectRoom($event)"></app-rooms-list>
 </div>
 
 <button (click)="toggle()">Toggle</button>
