@@ -1,9 +1,12 @@
 import {
+  AfterViewChecked,
   AfterViewInit,
   Component,
   DoCheck,
   OnInit,
+  QueryList,
   ViewChild,
+  ViewChildren,
 } from '@angular/core';
 import { Room, RoomList } from './rooms';
 import { HeaderComponent } from '../header/header.component';
@@ -13,7 +16,9 @@ import { HeaderComponent } from '../header/header.component';
   templateUrl: './rooms.component.html',
   styleUrls: ['./rooms.component.css'],
 })
-export class RoomsComponent implements OnInit, DoCheck, AfterViewInit {
+export class RoomsComponent
+  implements OnInit, DoCheck, AfterViewInit, AfterViewChecked
+{
   hotelName = 'Hilton Hotel Johannesburg';
 
   numberOfRooms = 10;
@@ -37,9 +42,14 @@ export class RoomsComponent implements OnInit, DoCheck, AfterViewInit {
   // component in the ngOnInit() lifecycle hook of the parent component,
   // and it ensures that the child component is available at that time.
   @ViewChild(HeaderComponent) headerComponent!: HeaderComponent;
+
+  @ViewChildren(HeaderComponent) headerChildrenComponent!: QueryList<HeaderComponent>;
   constructor() {}
+  ngAfterViewChecked(): void {}
   ngAfterViewInit(): void {
     this.headerComponent.title = 'Rooms View';
+
+    this.headerChildrenComponent.last.title = "last title"
   }
 
   // ngDoCheck is a lifecycle hook that gets called after every change detection cycle, very costly
