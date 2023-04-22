@@ -1,0 +1,39 @@
+<h1>Welcome to {{ hotelName }}</h1>
+
+<div [hidden]="hideRooms">
+  Number of Rooms:
+  <div [innerText]="numberOfRooms"></div>
+</div>
+
+<!-- ? after property to chekc if it's null before accessing -->
+<!-- ?? to say if null do this -->
+<!-- covers above essentially but more concise -->
+{{ rooms?.availableRooms ?? "No rooms" }}
+
+<div *ngIf="rooms.availableRooms > 0">
+  Rooms List
+  <table>
+    <tr>
+      <th>Index</th>
+      <th>Even/Odd</th>
+      <th>Room number</th>
+      <th>Room Type</th>
+      <th>Room Price</th>
+      <th>Amenities</th>
+      <th>Checkin Time</th>
+    </tr>
+    <tr 
+    [ngClass]="e ? 'even' : 'odd'"
+    *ngFor="let room of roomList; let e = even; let o = odd; let i = index">
+      <td>{{ i }}</td>
+      <td>{{ e ? "Even" : "Odd" }}</td>
+      <td>{{ room.roomId }}</td>
+      <td>{{ room.roomType }}</td>
+      <td>{{ room.price }}</td>
+      <td>{{ room.amenities }}</td>
+      <td>{{ room.checkInTime }}</td>
+    </tr>
+  </table>
+</div>
+
+<button (click)="toggle()">Toggle</button>
