@@ -27,7 +27,7 @@
 <!-- json pipe use to see json format of object, only for debugging purposes -->
 <!-- {{ roomList | json }} -->
 
-<div *ngIf="rooms.availableRooms > 0">
+<div *ngIf="hideRooms">
   <app-rooms-list [rooms]="roomList" [title]="title"
   (selectedRoom)="selectRoom($event)"></app-rooms-list>
 </div>

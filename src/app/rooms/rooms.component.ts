@@ -3,13 +3,16 @@ import {
   AfterViewInit,
   Component,
   DoCheck,
+  OnDestroy,
   OnInit,
   QueryList,
+  SkipSelf,
   ViewChild,
   ViewChildren,
 } from '@angular/core';
 import { Room, RoomList } from './rooms';
 import { HeaderComponent } from '../header/header.component';
+import { RoomsService } from './rooms.service';
 
 @Component({
   selector: 'app-rooms',
@@ -43,13 +46,18 @@ export class RoomsComponent
   // and it ensures that the child component is available at that time.
   @ViewChild(HeaderComponent) headerComponent!: HeaderComponent;
 
-  @ViewChildren(HeaderComponent) headerChildrenComponent!: QueryList<HeaderComponent>;
-  constructor() {}
+  @ViewChildren(HeaderComponent)
+  headerChildrenComponent!: QueryList<HeaderComponent>;
+  
+  // @SkipSelf() decorator is used in the constructor of a class to indicate
+  // that the dependency being injected should be searched for starting from the parent injector, rather than the current injector.
+  constructor(@SkipSelf() private roomsService: RoomsService) { }
+
   ngAfterViewChecked(): void {}
   ngAfterViewInit(): void {
     this.headerComponent.title = 'Rooms View';
 
-    this.headerChildrenComponent.last.title = "last title"
+    this.headerChildrenComponent.last.title = 'last title';
   }
 
   // ngDoCheck is a lifecycle hook that gets called after every change detection cycle, very costly
@@ -63,42 +71,7 @@ export class RoomsComponent
   // ngOnInit is a lifecycle hook that gets called after the constructor
   // Use ngOnInit after the component is initialized
   ngOnInit(): void {
-    console.log(this.headerComponent);
-    this.roomList = [
-      {
-        roomId: 1,
-        roomType: 'Single',
-        amenities: 'TV, Aircon, Wifi',
-        price: 100,
-        photos:
-          'https://pix10.agoda.net/hotelImages/79114/-1/e98e5ebcfc0bbb7175ad4d3c9c4aa71e.jpg?ca=19&ce=1&s=1024x768',
-        checkInTime: new Date('2021-01-01'),
-        checkOutTime: new Date('2021-01-02'),
-        rating: 4.5,
-      },
-      {
-        roomId: 2,
-        roomType: 'Double',
-        amenities: 'TV, Aircon, Wifi',
-        price: 200,
-        photos:
-          'https://hiltonsandton.hotels-johannesburg.com/data/Photos/OriginalPhoto/12783/1278399/1278399076/johannesburg-hilton-sandton-hotel-photo-2.JPEG',
-        checkInTime: new Date('2021-01-01'),
-        checkOutTime: new Date('2021-01-02'),
-        rating: 3.4123121,
-      },
-      {
-        roomId: 3,
-        roomType: 'Family',
-        amenities: 'TV, Aircon, Wifi',
-        price: 300,
-        photos:
-          'https://hilton-sandton-hotel-johannesburg.booked.net/data/Photos/OriginalPhoto/12784/1278401/1278401350/Hilton-Sandton-Hotel-Johannesburg-Exterior.JPEG',
-        checkInTime: new Date('2021-01-01'),
-        checkOutTime: new Date('2021-01-02'),
-        rating: 2.6231231,
-      },
-    ];
+    this.roomList = this.roomsService.getRooms();
   }
 
   toggle() {
