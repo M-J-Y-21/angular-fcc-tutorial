@@ -2,12 +2,13 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Inject,
   OnInit,
   Optional,
   ViewChild,
   ViewContainerRef,
 } from '@angular/core';
-import { RoomsComponent } from './rooms/rooms.component';
+import { localStorageToken } from './localstorage.token';
 import { LoggerService } from './logger.service';
 
 @Component({
@@ -21,11 +22,16 @@ export class AppComponent implements OnInit {
   @ViewChild('name', { static: true }) name!: ElementRef;
 
   // Optional decorator is used to say that if the service is not available then don't throw an error
-  constructor(@Optional() private loggerService: LoggerService) {}
+  constructor(@Optional() private loggerService: LoggerService,
+    @Inject(localStorageToken) private localStorage: any) { 
+    
+  }
 
   ngOnInit(): void {
     this.loggerService.log('AppComponent.ngOnInit()');
     this.name.nativeElement.innerText = 'Hilton Hotel Johannesburg';
+
+    this.localStorage.setItem('name', 'Hilton Hotel Johannesburg');
   }
   // // Gives ref to user tag
   // @ViewChild('user', { read: ViewContainerRef }) vcr!: ViewContainerRef;

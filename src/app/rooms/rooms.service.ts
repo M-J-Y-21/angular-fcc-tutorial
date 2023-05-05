@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable } from '@angular/core';
 import { RoomList } from './rooms';
-
+import { APP_SERVICE_CONFIG } from '../AppConfig/appconfig.service';
+import { AppConfig } from '../AppConfig/appconfig.interface';
 // providedIn root means that the service is available to the entire application
 // i.e. registered in app.module.ts
 @Injectable({
@@ -43,8 +44,9 @@ export class RoomsService {
     },
   ];
 
-  constructor() {
-    console.log('Rooms service is initialized')
+  constructor(@Inject(APP_SERVICE_CONFIG) private config: AppConfig) {
+    console.log(this.config.apiEndpoint);
+    console.log('Rooms service is initialized');
   }
 
   getRooms() {
